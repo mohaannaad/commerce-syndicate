@@ -1,0 +1,130 @@
+import { Phone, Mail, MapPin } from "lucide-react";
+import Brand from "./Brand";
+
+const quickLinks = ["الرئيسية", "عن النقابة", "التسجيل في النقابة", "اللوائح والقوانين", "الأخبار"];
+const services = ["تجديد الاشتراك وتجديد الكارنيه", "تسجيل الخريجين", "خدمة الشكاوى والاستفسارات", "إصدار شهادات رسمية"];
+const resources = ["دليل العضو", "الأسئلة الشائعة", "نماذج وملفات", "اللوائح والقوانين", "النقابات الفرعية"];
+
+function LinkedinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z" />
+    </svg>
+  );
+}
+
+function InstagramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.5" y2="6.5" />
+    </svg>
+  );
+}
+
+function TwitterIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+      <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3V2z" />
+    </svg>
+  );
+}
+
+const socials = [LinkedinIcon, InstagramIcon, TwitterIcon, FacebookIcon];
+
+function FooterColumn({ title, links }: { title: string; links: string[] }) {
+  return (
+    <div className="text-right">
+      <h4 className="font-bold text-white mb-5">{title}</h4>
+      <ul className="space-y-3">
+        {links.map((link) => (
+          <li key={link}>
+            <a href="#" className="text-sm text-white/55 hover:text-white hover:pr-1 transition-all">
+              {link}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default function Footer() {
+  return (
+    <footer className="relative bg-dark text-white pt-20 pb-8 overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-60" />
+      <div className="absolute -top-40 left-1/4 w-[30rem] h-[30rem] rounded-full bg-primary/30 blur-3xl" />
+      <div className="relative max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
+          <div className="text-right col-span-2 md:col-span-1 flex flex-col items-start">
+            <Brand variant="dark" compact />
+            <p className="mt-5 text-sm text-white/55 leading-relaxed w-full">
+              نقابة التجاريين كيان مهني يهدف إلى دعم أعضائه من خريجي كليات التجارة، والارتقاء بالمهن التجارية والمحاسبية، وتقديم خدمات مهنية واجتماعية، وتمثيل الأعضاء أمام الجهات الرسمية.
+            </p>
+            <div className="mt-6 flex gap-2">
+              {socials.map((Icon, i) => (
+                <a key={i} href="#" className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-accent transition-colors">
+                  <Icon />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <FooterColumn title="روابط سريعة" links={quickLinks} />
+          <FooterColumn title="الخدمات" links={services} />
+          <FooterColumn title="المصادر" links={resources} />
+
+          <div className="text-right col-span-2 md:col-span-1 space-y-5">
+            <div className="flex items-start gap-3">
+              <span className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                <Phone className="w-4 h-4" />
+              </span>
+              <div>
+                <div className="text-xs text-white/50">اتصل بنا على</div>
+                <div className="mt-0.5 font-bold" dir="ltr" style={{ textAlign: "right" }}>
+                  19xxx
+                </div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                <Mail className="w-4 h-4" />
+              </span>
+              <div>
+                <div className="text-xs text-white/50">هل لديك سؤال؟</div>
+                <div className="mt-0.5 font-bold text-sm break-all" dir="ltr" style={{ textAlign: "right" }}>info@commerce-syndicate.org</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4" />
+              </span>
+              <div>
+                <div className="text-xs text-white/50">المقر الرئيسي</div>
+                <div className="mt-0.5 text-sm">القاهرة، جمهورية مصر العربية</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-16 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/40">
+          <span>© 2026 جميع الحقوق محفوظة - نقابة التجاريين</span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+          </span>
+        </div>
+      </div>
+    </footer>
+  );
+}

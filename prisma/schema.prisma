@@ -1,0 +1,319 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+model User {
+  id        String   @id @default(cuid())
+  fullName  String
+  email     String   @unique
+  password  String
+  phone     String?
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+}
+model News {
+  id         String   @id @default(cuid())
+  type       NewsType @default(ARTICLE)
+  title      String
+  content    String?
+  imageUrl   String?
+  youtubeUrl String?
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+}
+
+enum NewsType {
+  YOUTUBE
+  ARTICLE
+}
+
+model Ad {
+  id          String   @id @default(cuid())
+  placement   AdPlacement
+  duration    String
+  price       Int
+  title       String
+  description String
+  contactInfo String
+  fileUrl     String?
+  status      AdStatus @default(DRAFT)
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime @default(now())
+}
+
+enum AdPlacement {
+  WEBSITE
+  HQ
+  BOTH
+}
+
+enum AdStatus {
+  DRAFT
+  UNDER_REVIEW
+  NEEDS_EDIT
+  APPROVED_AWAITING_PAYMENT
+  PAID
+  SCHEDULED
+  PUBLISHED
+  COMPLETED
+  REJECTED
+}
+
+model Complaint {
+  id               String            @id @default(cuid())
+  ticketNumber     String            @unique
+  category         ComplaintCategory
+  title            String
+  details          String
+  attachments      String[]
+  submitterName    String
+  submitterContact String
+  status           ComplaintStatus   @default(RECEIVED)
+  adminResponse    String?
+  escalated        Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  respondedAt      DateTime?
+}
+
+enum ComplaintCategory {
+  MEMBERSHIP
+  CERTIFICATES_CARDS
+  SUBSCRIPTIONS
+  INSTALLMENTS_PROJECTS
+  TRIPS_COURSES_EVENTS
+  ADS
+  TECHNICAL_ISSUE
+  ADMINISTRATIVE
+  OTHER
+}
+
+enum ComplaintStatus {
+  RECEIVED
+  UNDER_REVIEW
+  NEEDS_INFO
+  TRANSFERRED
+  RESPONDED
+  CLOSED
+  REJECTED
+}
+
+model Fee {
+  id        String   @id @default(cuid())
+  name      String
+  price     Int
+  note      String?
+  order     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model Activity {
+  id            String       @id @default(cuid())
+  category      ActivityCategory
+  title         String
+  description   String
+  imageUrl      String?
+  date          DateTime
+  location      String
+  bookingDeadline DateTime
+  price         Int          @default(0)
+  capacity      Int
+  createdAt     DateTime     @default(now())
+}
+
+enum ActivityCategory {
+  TRIP
+  COURSE
+  EVENT
+  RAMADAN_IFTAR
+  RAMADAN_SUHOOR
+  OTHER
+}
+
+model CertificateRequest {
+  id               String             @id @default(cuid())
+  type             CertificateType
+  destination      String?
+  attachments      String[]
+  deliveryMethod   DeliveryMethod
+  price            Int
+  memberName       String
+  membershipNumber String
+  contactInfo      String
+  status           CertificateStatus  @default(AWAITING_PAYMENT)
+  createdAt        DateTime           @default(now())
+}
+
+enum CertificateType {
+  GOOD_CONDUCT_AR
+  GOOD_CONDUCT_EN
+  MBA_ISLESCA
+  DBA_ISLESCA
+  MBA_NAVAL_ACADEMY
+  DBA_NAVAL_ACADEMY
+  DIPLOMA_NAVAL_ACADEMY
+  MBA_ARAB_ACADEMY
+  DBA_ARAB_ACADEMY
+}
+
+enum DeliveryMethod {
+  ELECTRONIC
+  DELIVERY
+  PICKUP
+}
+
+enum CertificateStatus {
+  DRAFT
+  AWAITING_PAYMENT
+  PAID
+  UNDER_REVIEW
+  ISSUED
+  COMPLETED
+  REJECTED
+}
+model GraduateApplication {
+  id                     String             @id @default(cuid())
+  serial                 Int                @unique @default(autoincrement())
+
+  // البيانات الشخصية
+  fullNameAr             String
+  fullNameEn             String
+  nationalId             String
+  phone                  String
+  email                  String
+  gender                 Gender
+  nationality            String
+  religion               String
+  birthDate              DateTime
+  birthGovernorate       String
+  idIssuer               String
+
+  // محل الإقامة
+  governorate            String
+  city                   String
+  district               String
+  street                 String
+  buildingNo             String
+  apartment              String?
+  landmark               String?
+
+  // البيانات الأكاديمية
+  universityType         UniversityType
+  universityName         String
+  universityCountry      String?
+  studyStartYear         Int
+  graduationYear         Int
+  studyYears             Int
+  grade                  String
+  highSchoolType         String
+  highSchoolYear         Int
+  highSchoolScore        Float?
+  highSchoolPercent      Float?
+  hasPreviousQualification Boolean          @default(false)
+  previousQualification  String?
+  previousRejection      Boolean            @default(false)
+
+  // المستندات: [{ key, label, original, url }]
+  documents              Json
+
+  declarationAccepted    Boolean            @default(false)
+  category               Int?
+  fee                    Int?
+  status                 GraduateStatus     @default(AWAITING_PAYMENT)
+  adminNote              String?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum UniversityType {
+  GOVERNMENT
+  PRIVATE
+  FOREIGN
+}
+
+enum GraduateStatus {
+  AWAITING_PAYMENT
+  UNDER_REVIEW
+  NEEDS_COMPLETION
+  AWAITING_ORIGINALS
+  LICENSING
+  REGISTERED
+  REJECTED
+}
+
+// ⚠️ مؤقت: بيانات الأعضاء هنا للتجربة بس.
+// لما API النقابة (Oracle) يجهز، البيانات هتيجي منه بدل الجدول ده.
+model Member {
+  id               String           @id @default(cuid())
+  membershipNumber String           @unique
+  nationalId       String           @unique
+  fullName         String
+  phone            String
+  address          String
+  photoUrl         String?
+  lastPaidYear     Int
+  renewals         RenewalRequest[]
+  createdAt        DateTime         @default(now())
+}
+
+model RenewalRequest {
+  id                String         @id @default(cuid())
+  serial            Int            @unique @default(autoincrement())
+  memberId          String
+  member            Member         @relation(fields: [memberId], references: [id])
+  years             Int[]
+  subscriptionTotal Int
+  lateTotal         Int
+  deliveryFee       Int            @default(0)
+  total             Int
+  phone             String
+  address           String
+  photoUrl          String?
+  deliveryMethod    CardDelivery
+  deliveryAddress   String?
+  status            RenewalStatus  @default(AWAITING_PAYMENT)
+  adminNote         String?
+  paidAt            DateTime?
+  createdAt         DateTime       @default(now())
+}
+
+enum CardDelivery {
+  DELIVERY
+  PICKUP
+}
+
+enum RenewalStatus {
+  AWAITING_PAYMENT
+  RECEIVED
+  UNDER_REVIEW
+  ISSUED
+  DELIVERED
+  REJECTED
+}
+
+// إعدادات عامة للموقع يتحكم فيها الموظف من الداشبورد
+// (زي الخدمات الظاهرة في الصفحة الرئيسية)
+model SiteSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
