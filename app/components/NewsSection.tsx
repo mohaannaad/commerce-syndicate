@@ -28,7 +28,7 @@ export default async function NewsSection({ title = "أخر الاخبار", sub
         {useRealData ? (
           <>
             {firstGroup.length > 0 && (
-              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
                 {firstGroup.map((item) => (
                   <NewsCard key={item.id} id={item.id} type={item.type} title={item.title} content={item.content} imageUrl={item.imageUrl} youtubeUrl={item.youtubeUrl} createdAt={item.createdAt.toString()} />
                 ))}
